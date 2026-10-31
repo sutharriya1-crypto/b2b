@@ -1,0 +1,11 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Live pings the browser listens to. Only counts and statuses, no personal details.
+    // inbox ids are unguessable hashes made by the server.
+    match /boards/{reqId} { allow read: if true; allow write: if false; }
+    match /inbox/{inboxId} { allow read: if true; allow write: if false; }
+    // Everything else (deals with phone numbers) is server-only.
+    match /{document=**} { allow read, write: if false; }
+  }
+}

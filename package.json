@@ -1,0 +1,27 @@
+{
+  "name": "bale-to-brick",
+  "version": "1.0.0",
+  "description": "Marketplace connecting farmers, buyers (brick/biomass companies) and baling operators via reverse bidding to put crop stubble to use instead of burning it.",
+  "main": "server.js",
+  "private": true,
+  "engines": {
+    "node": ">=22.13"
+  },
+  "scripts": {
+    "start": "node --no-warnings --env-file-if-exists=.env server.js",
+    "dev": "node --no-warnings --env-file-if-exists=.env --watch server.js",
+    "seed": "node --no-warnings --env-file-if-exists=.env src/seed.js",
+    "test": "node --no-warnings --test test/*.test.js",
+    "export-training": "node --no-warnings scripts/export-training.js"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@google/earthengine": "^1.7.50",
+    "bcryptjs": "^3.0.3",
+    "express": "^5.3.0",
+    "firebase-admin": "^13.10.0",
+    "google-auth-library": "^9.15.1",
+    "jsonwebtoken": "^9.0.3",
+    "nodemailer": "^6.10.1"
+  }
+}

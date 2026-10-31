@@ -1,0 +1,10 @@
+node_modules/
+data/
+.env
+*.db
+*.db-shm
+*.db-wal
+.jwt_secret
+.firebaserc
+service-account*.json
+functions/node_modules/
