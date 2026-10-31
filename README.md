@@ -64,6 +64,15 @@ Add your web.app and run.app addresses to the Maps key's allowed websites and to
 - **Order tracking** (`#/track`, `#/track/:id`): nine-step rail from deal sealed to payment released, acres-cleared meter and live field updates posted by the operator.
 - **Reverse-auction hall** (`#/buyer/auctions`): every live auction with a price-drop chart against the budget, top three bids and one-tap accept.
 
+## Voice assistant ("Ask AI")
+A button on every page opens "Ask Bale to Brick". Tap the mic and speak in Hindi or English (Chrome/Edge speech recognition), or type.
+It answers from the person's own live data (lowest bids, rank, orders, payments due, money in escrow), reads the reply aloud and can open the right page.
+With GEMINI_API_KEY it uses Gemini; without a key a built-in bilingual assistant answers the same questions.
+
+## Demo data
+7 farmers, 4 buyers, 6 operators (password demo1234; the login page has one-tap demo accounts), 6 live reverse auctions with price history,
+5 completed deals (shown on the landing page), 2 in progress, 1 waiting for farmer confirmation, 1 waiting for payment, 1 refunded.
+
 ## Layout
 server.js (app, security headers) | src/api.js (marketplace rules) | src/api-google.js (Google feature routes)
 src/google/ (ai, earth, firebase, routes, vertex, vision) | src/otp.js | src/live.js | src/estimate.js

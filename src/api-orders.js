@@ -212,4 +212,42 @@ router.get('/buyer/auctions', requireAuth('buyer'), route((req, res) => {
   });
 }));
 
+/* ───────────────────────── public showcase for the landing page ───────────────────────── */
+
+router.get('/showcase', route((req, res) => {
+  const deals = db.prepare(
+    `SELECT d.id, d.price_total, d.sealed_at, d.started_at, d.completed_at, d.work_done_at, r.budget_total,
+            l.crop, l.acres, l.est_tonnes, l.district, l.state, l.village,
+            bu.company AS buyer, COALESCE(ou.company, ou.name) AS operator,
+            (SELECT COUNT(DISTINCT operator_id) FROM bids b WHERE b.requirement_id = d.requirement_id) AS bid_count,
+            (SELECT amount FROM payments p WHERE p.deal_id = d.id AND p.kind = 'payout_farmer') AS farmer_paid
+       FROM deals d
+       JOIN requirements r ON r.id = d.requirement_id
+       JOIN listings l ON l.id = d.listing_id
+       JOIN users bu ON bu.id = d.buyer_id
+       JOIN users ou ON ou.id = d.operator_id
+      WHERE d.status = 'completed' ORDER BY d.completed_at DESC LIMIT 6`
+  ).all().map((d) => {
+    const rt = db.prepare('SELECT stars, comment FROM ratings WHERE deal_id = ? AND comment IS NOT NULL ORDER BY id LIMIT 1').get(d.id);
+    const from = (d.started_at || d.sealed_at).slice(0, 10), to = (d.work_done_at || d.completed_at).slice(0, 10);
+    return {
+      crop: d.crop, acres: d.acres, tonnes: d.est_tonnes, district: d.district, state: d.state, village: d.village,
+      budget_total: d.budget_total, price_total: d.price_total, bid_count: d.bid_count, completed_at: d.completed_at,
+      days_taken: Math.max(1, diffDays(from, to)), buyer: d.buyer, operator: d.operator,
+      farmer_paid: d.farmer_paid || 0, stars: rt?.stars || null, comment: rt?.comment || null,
+    };
+  });
+  const live = db.prepare(
+    `SELECT r.id, r.budget_total, l.crop, l.acres, l.district, l.state, ${BID_STATS_SQL}
+       FROM requirements r JOIN listings l ON l.id = r.listing_id
+      WHERE r.status = 'open' ORDER BY bid_count DESC, r.id DESC LIMIT 4`
+  ).all().map((r) => {
+    const h = lowestSeries(r.id);
+    return { crop: r.crop, acres: r.acres, district: r.district, state: r.state, budget_total: r.budget_total,
+      bid_count: r.bid_count, lowest_bid: r.lowest_bid,
+      drop_pct: h.first_bid && r.lowest_bid ? Math.round(((h.first_bid - r.lowest_bid) / h.first_bid) * 100) : 0 };
+  });
+  res.json({ deals, live });
+}));
+
 module.exports = router;

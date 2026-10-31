@@ -4,6 +4,7 @@ const { db } = require('./src/db');
 const api = require('./src/api');
 const apiGoogle = require('./src/api-google');
 const apiOrders = require('./src/api-orders');
+const assistant = require('./src/assistant');
 
 const app = express();
 if (process.env.TRUST_PROXY) app.set('trust proxy', Number(process.env.TRUST_PROXY) || 1);
@@ -22,7 +23,7 @@ app.use((req, res, next) => {
       "script-src 'self' https://maps.googleapis.com https://maps.gstatic.com https://www.gstatic.com https://apis.google.com https://www.google.com/recaptcha/ https://www.recaptcha.net",
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       'font-src https://fonts.gstatic.com',
-      "img-src 'self' data: blob: https://*.googleapis.com https://*.gstatic.com https://*.google.com https://*.ggpht.com https://*.googleusercontent.com https://images.unsplash.com",
+      "img-src 'self' data: blob: https://*.googleapis.com https://*.gstatic.com https://*.google.com https://*.ggpht.com https://*.googleusercontent.com https://images.unsplash.com https://commons.wikimedia.org https://upload.wikimedia.org",
       "connect-src 'self' https://*.googleapis.com https://*.google.com https://*.gstatic.com wss://*.firebaseio.com data: blob:",
       "frame-src https://www.google.com https://maps.google.com https://*.firebaseapp.com https://*.web.app https://recaptcha.google.com https://www.recaptcha.net",
       'worker-src blob:',
@@ -39,6 +40,7 @@ const bigJson = express.json({ limit: '6mb' });
 const smallJson = express.json({ limit: '100kb' });
 app.use((req, res, next) => (/^\/api\/(ai\/read-document|deals\/\d+\/photos)$/.test(req.path) ? bigJson : smallJson)(req, res, next));
 app.use('/api', apiGoogle);
+app.use('/api', assistant);
 app.use('/api', apiOrders);
 app.use('/api', api);
 app.use('/api', (req, res) => res.status(404).json({ error: 'Not found.' }));

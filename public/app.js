@@ -249,6 +249,26 @@
     'Google Agritech Stack': 'Google एग्रीटेक स्टैक',
     'Calculate Environmental Impact': 'पर्यावरणीय प्रभाव की गणना',
     'Select crop and land area to estimate residue value and emissions avoided': 'अवशेष और बचे हुए धुएँ का अनुमान लगाने के लिए फसल और ज़मीन चुनें',
+    // v3: navbar, landing, assistant
+    'Stubble to fuel, not fire': 'पराली ईंधन बने, आग नहीं', 'Menu': 'मेनू', 'Jobs': 'काम', 'Profile': 'प्रोफ़ाइल',
+    'Proof it works': 'काम का सबूत', 'Deals closed on Bale to Brick': 'बेल टू ब्रिक पर पूरे हुए सौदे',
+    'Real flows from the demo marketplace: who bid, what the buyer paid, how fast the field was cleared.': 'डेमो मार्केटप्लेस के असली उदाहरण: किसने बोली लगाई, खरीदार ने कितना दिया, खेत कितनी जल्दी साफ हुआ।',
+    'Auctions running now': 'अभी चल रही नीलामियाँ', 'Buyer budget': 'खरीदार का बजट', 'Won at': 'जीती कीमत', 'Bids': 'बोलियाँ', 'Cleared in': 'सफाई में लगे',
+    'tonnes kept out of the fire': 'टन जलने से बचा', 'farmer earned': 'किसान को मिले', 'Completed deals will show up here.': 'पूरे हुए सौदे यहाँ दिखेंगे।',
+    'From a burning problem to a brick kiln’s fuel': 'जलती समस्या से भट्ठे के ईंधन तक', 'Photo': 'फ़ोटो',
+    'Harvested field with loose straw. The farmer lists it instead of setting it on fire.': 'कटाई के बाद खुली पराली वाला खेत। किसान आग लगाने की जगह इसे दर्ज करता है।',
+    'The winning operator rakes, bales and loads the straw within the promised days.': 'जीतने वाला ऑपरेटर तय दिनों में पराली इकट्ठा करके गठ्ठे बनाता और लादता है।',
+    'Bales reach the brick kiln or biomass plant and replace coal in the firing.': 'गठ्ठे ईंट भट्ठे या बायोमास प्लांट पहुँचते हैं और कोयले की जगह जलते हैं।',
+    'Demo accounts share the password demo1234. Tap one to log in.': 'डेमो खातों का पासवर्ड demo1234 है। लॉग इन के लिए किसी एक पर टैप करें।',
+    'Demo accounts: tap one to fill the mobile number.': 'डेमो खाते: मोबाइल नंबर भरने के लिए टैप करें।',
+    'Ask Bale to Brick': 'बेल टू ब्रिक से पूछें', 'Ask AI': 'AI से पूछें', 'Voice assistant': 'वॉइस असिस्टेंट',
+    'Hi! Ask me about your auctions, bids, orders or payments. Tap the mic and speak in Hindi or English.': 'नमस्ते! अपनी नीलामी, बोली, ऑर्डर या भुगतान के बारे में पूछिए। माइक दबाकर हिन्दी या अंग्रेज़ी में बोलिए।',
+    'Hi! I can explain how Bale to Brick works. Tap the mic and speak in Hindi or English.': 'नमस्ते! मैं बता सकता हूँ कि बेल टू ब्रिक कैसे काम करता है। माइक दबाकर हिन्दी या अंग्रेज़ी में बोलिए।',
+    'Mute spoken replies': 'बोलकर जवाब बंद करें', 'Speak replies aloud': 'जवाब बोलकर सुनाएँ', 'Open page': 'पेज खोलें',
+    'Voice input needs Chrome or Edge. You can type instead.': 'बोलकर पूछने के लिए Chrome या Edge चाहिए। आप लिखकर भी पूछ सकते हैं।',
+    'Stop listening': 'सुनना बंद करें', 'Speak': 'बोलें', 'Listening…': 'सुन रहा हूँ…', 'Ask by voice or type here': 'बोलकर या लिखकर पूछें',
+    'Your question': 'आपका सवाल', 'Send': 'भेजें',
+    'Microphone permission was denied. Allow it in the address bar, or type your question.': 'माइक की अनुमति नहीं मिली। एड्रेस बार से अनुमति दें, या सवाल लिखें।',
     // payments, tracking, auctions
     'Track': 'ट्रैक', 'Payments': 'भुगतान', 'Auctions': 'नीलामी', 'Track order': 'ऑर्डर ट्रैक करें', 'Track orders': 'ऑर्डर ट्रैक करें',
     'Reverse auctions': 'रिवर्स नीलामी', 'Start a new auction': 'नई नीलामी शुरू करें', 'Open auction room': 'नीलामी कक्ष खोलें',
@@ -329,11 +349,11 @@
     return icons[name] || '';
   }
 
-  function brandLogo() {
-    return `<span class="brand-icon" aria-hidden="true">${icon('logo', 26)}</span>
+  function brandLogo(size = 44) {
+    return `<img class="brand-logo" src="img/logo-192.png" width="${size}" height="${size}" alt="">
     <span class="brand-text">
       <span class="brand-title">Bale to Brick</span>
-      <span class="brand-sub">Agritech Platform</span>
+      <span class="brand-sub">${t('Stubble to fuel, not fire')}</span>
     </span>`;
   }
 
@@ -760,54 +780,56 @@
   function header() {
     const u = S.user;
     const hash = location.hash || '#/';
-    const link = (href, label, icn) => `<a href="${href}" class="${hash === href || (href !== '#/' && hash.startsWith(href + '/')) ? 'active' : ''}">${icn ? icon(icn, 15) : ''}<span>${t(label)}</span></a>`;
+    const on = (href) => hash === href || (href !== '#/' && hash.startsWith(href + '/'));
+    const link = (href, label, icn) => `<a href="${href}" class="${on(href) ? 'active' : ''}" ${on(href) ? 'aria-current="page"' : ''}>${icn ? icon(icn, 16) : ''}<span>${t(label)}</span></a>`;
     let links = '';
-    if (!u) links += link('#/', 'Home');
     const common = () => link('#/deals', 'Deals', 'shield') + link('#/track', 'Track', 'truck') + link('#/payments', 'Payments', 'wallet');
     if (u?.role === 'farmer') {
-      links += link('#/farmer', 'Dashboard', 'wheat');
-      links += link('#/farmer/new', 'Post land', 'sparkles');
-      links += common();
+      links += link('#/farmer', 'Dashboard', 'wheat') + link('#/farmer/new', 'Post land', 'sparkles') + common();
     } else if (u?.role === 'buyer') {
-      links += link('#/buyer/find', 'Marketplace', 'wheat');
-      links += link('#/buyer/auctions', 'Auctions', 'trophy');
-      links += link('#/buyer/jobs', 'Dashboard', 'factory');
-      links += common();
+      links += link('#/buyer/find', 'Marketplace', 'wheat') + link('#/buyer/auctions', 'Auctions', 'trophy') + link('#/buyer/jobs', 'Dashboard', 'factory') + common();
     } else if (u?.role === 'operator') {
-      links += link('#/operator/jobs', 'Dashboard', 'tractor');
-      links += link('#/operator/bids', 'My bids', 'coins');
-      links += common();
+      links += link('#/operator/jobs', 'Jobs', 'tractor') + link('#/operator/bids', 'My bids', 'coins') + common();
     } else {
-      links += link('#/buyer/find', 'Marketplace', 'wheat');
-      links += link('#/operator/jobs', 'Find Transport', 'tractor');
-      links += `<a href="#/how-it-works">${icon('info', 15)}<span>${t('How It Works')}</span></a>`;
+      links += link('#/', 'Home') + `<a href="#/how-it-works">${t('How It Works')}</a>` + link('#/buyer/find', 'Marketplace') + link('#/operator/jobs', 'Find Transport') + link('#/tech', 'Built with Google');
     }
-    if (!u) links += link('#/tech', 'Built with Google', 'sparkles');
+    const initials = u ? (u.company || u.name).split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join('').toUpperCase() : '';
+    const roleLabel = u ? t({ farmer: 'Farmer', buyer: 'Buyer', operator: 'Operator' }[u.role]) : '';
 
     return `
     <header class="topbar" data-role="${u ? u.role : ''}">
-      <a class="brand" href="${u ? homeFor(u.role) : '#/'}" aria-label="${t('Bale to Brick')}">
-        ${brandLogo()}
-      </a>
-      <nav class="nav" aria-label="Main">${links}</nav>
-      <div class="bar-tools">
-        <button class="btn-tool" data-action="lang" aria-label="Language">
-          ${icon('leaf', 14)} <span>${S.lang === 'hi' ? 'English' : 'हिन्दी'}</span>
-        </button>
-        ${u ? `
-          <div class="bell-wrap">
-            <button class="btn-tool bell" data-action="bell" aria-label="${t('Notifications')}" aria-expanded="false">
-              ${icon('bell', 18)}
-              <span class="badge" id="badge" ${S.unread ? '' : 'hidden'}>${S.unread}</span>
-            </button>
-            <div class="notif-panel" id="notif-panel" hidden></div>
-          </div>
-          <a class="btn-tool who" href="#/profile" title="${t('Profile')}">
-            ${icon('user', 14)} <span>${esc((u.company || u.name).slice(0, 20))}</span>
-          </a>
-          <button class="btn-tool" data-action="logout" title="${t('Log out')}">${t('Log out')}</button>`
-        : `<a class="btn-tool" href="#/login/farmer">${t('Log in')}</a>
-           <a class="btn btn-primary btn-sm" href="#/register/farmer">${t('Get Started')}</a>`}
+      <div class="topbar-inner">
+        <a class="brand" href="${u ? homeFor(u.role) : '#/'}" aria-label="${t('Bale to Brick')}">${brandLogo()}</a>
+        <nav class="nav" id="main-nav" aria-label="Main">${links}</nav>
+        <div class="bar-tools">
+          <button class="btn-tool lang" data-action="lang" aria-label="Language">${S.lang === 'hi' ? 'EN' : 'हिं'}</button>
+          ${u ? `
+            <div class="bell-wrap">
+              <button class="btn-tool bell" data-action="bell" aria-label="${t('Notifications')}" aria-expanded="false">
+                ${icon('bell', 18)}
+                <span class="badge" id="badge" ${S.unread ? '' : 'hidden'}>${S.unread}</span>
+              </button>
+              <div class="notif-panel" id="notif-panel" hidden></div>
+            </div>
+            <div class="acct-wrap">
+              <button class="acct" data-action="account" aria-haspopup="menu" aria-expanded="false" aria-label="${esc(u.company || u.name)}">
+                <span class="acct-av">${esc(initials)}</span>
+                <span class="acct-name"><b>${esc((u.company || u.name).slice(0, 22))}</b><small>${roleLabel}</small></span>
+              </button>
+              <div class="acct-menu" id="acct-menu" role="menu" hidden>
+                <p class="acct-head"><b>${esc(u.name)}</b><small>${esc(u.email)}</small></p>
+                <a role="menuitem" href="#/profile">${icon('user', 15)} <span>${t('Profile')}</span></a>
+                <a role="menuitem" href="#/payments">${icon('wallet', 15)} <span>${t('Payments')}</span></a>
+                <a role="menuitem" href="#/tech">${icon('sparkles', 15)} <span>${t('Built with Google')}</span></a>
+                <button role="menuitem" data-action="logout">${t('Log out')}</button>
+              </div>
+            </div>`
+          : `<a class="btn-tool login-link" href="#/login/farmer">${t('Log in')}</a>
+             <a class="btn btn-primary btn-sm cta-start" href="#/register/farmer">${t('Get Started')}</a>`}
+          <button class="btn-tool burger" data-action="menu" aria-controls="main-nav" aria-expanded="false" aria-label="${t('Menu')}">
+            <span></span><span></span><span></span>
+          </button>
+        </div>
       </div>
     </header>`;
   }
@@ -920,6 +942,7 @@
     afterRender = () => {
       loadStats();
       updateLandingCalc();
+      loadShowcase();
     };
     const ladder = [['Rajdhani Baling', 71000, 5], ['Haryana Agri Machinery', 62000, 6], ['Kisan Baler Services', 58000, 7]];
     return page(`
@@ -940,7 +963,7 @@
           <p class="small hero-login">
             ${t('Already registered?')} <a href="#/login/farmer">${t('Log in')}</a>
             <span class="hero-sep" aria-hidden="true">|</span>
-            <a href="#/login/farmer" data-action="fill-demo" data-email="farmer@demo.in" data-phone="9876500001">⚡ ${t('Quick Demo Login')}</a>
+            <a href="#/login/buyer" data-action="fill-demo" data-role="buyer">⚡ ${t('Quick Demo Login')}</a>
           </p>
         </div>
         <div class="hero-cards-col">
@@ -1121,12 +1144,72 @@
       </div>
     </section>
 
-    <!-- ILLUSTRATED FIELD FLOW -->
-    <section style="padding: 2.5rem max(1.2rem, calc((100% - 1200px) / 2)); background: var(--cream-bg); text-align: center;">
-      <h3 style="margin-bottom: 0.5rem; color: var(--forest-dark); font-size: 1.5rem;">${t('Field to Kiln Logistics')}</h3>
-      <div class="hero-art" aria-hidden="true">${heroArt()}</div>
+    <!-- RECENT SUCCESSFUL DEALS + LIVE AUCTIONS (filled from /api/showcase) -->
+    <section class="showcase-section" id="showcase">
+      <div class="section-header">
+        <span class="section-tag">${t('Proof it works')}</span>
+        <h2>${t('Deals closed on Bale to Brick')}</h2>
+        <p>${t('Real flows from the demo marketplace: who bid, what the buyer paid, how fast the field was cleared.')}</p>
+      </div>
+      <div id="showcase-live" class="live-strip"></div>
+      <div id="showcase-deals" class="success-grid">${loading()}</div>
+    </section>
+
+    <!-- FIELD → BALE → KILN, IN PHOTOS -->
+    <section class="journey-section">
+      <div class="section-header">
+        <span class="section-tag">${t('Field to Kiln Logistics')}</span>
+        <h2>${t('From a burning problem to a brick kiln’s fuel')}</h2>
+      </div>
+      <ol class="journey">
+        ${[
+          ['field', 'Late_summer_straw_field_Ontario_County_NY_01.jpg', 'Field', 'Harvested field with loose straw. The farmer lists it instead of setting it on fire.'],
+          ['bale', 'Harvest_Straw_Bales_in_Schleswig-Holstein.jpg', 'Bale', 'The winning operator rakes, bales and loads the straw within the promised days.'],
+          ['kiln', 'Indian_brick_kiln.jpg', 'Kiln', 'Bales reach the brick kiln or biomass plant and replace coal in the firing.'],
+        ].map(([k, file, title, text], i) => `
+        <li class="journey-step journey-${k}">
+          <figure>
+            <img src="https://commons.wikimedia.org/wiki/Special:FilePath/${file}?width=900" alt="${esc(t(title))}" loading="lazy" decoding="async" data-fallback="${k}" width="900" height="600">
+            <figcaption><a href="https://commons.wikimedia.org/wiki/File:${file}" target="_blank" rel="noopener">${t('Photo')}: Wikimedia Commons</a></figcaption>
+          </figure>
+          <div class="journey-copy">
+            <span class="journey-num">${i + 1}</span>
+            <h3>${t(title)}</h3>
+            <p>${t(text)}</p>
+          </div>
+        </li>`).join('')}
+      </ol>
     </section>
     `, 'landing');
+  }
+
+  async function loadShowcase() {
+    let d;
+    try { d = await api('/showcase'); } catch { return; }
+    const box = $('#showcase-deals'), live = $('#showcase-live');
+    if (!box) return;
+    live.innerHTML = d.live.length ? `<p class="live-title"><span class="live-dot">${t('Live')}</span> ${t('Auctions running now')}</p>
+      <div class="live-cards">${d.live.map((a) => `<div class="live-card">
+        <b>${fmtNum(a.acres)} ${t('acres')} · ${cropLabel(a.crop)}</b>
+        <span class="muted small">${esc(a.district)}, ${esc(a.state)}</span>
+        <span class="live-num">${a.lowest_bid ? inr(a.lowest_bid) : '—'} <small>${a.bid_count} ${t(a.bid_count === 1 ? 'bid' : 'bids')}</small></span>
+        <span class="small muted">${t('Budget')} ${inr(a.budget_total)}${a.drop_pct > 0 ? ` · <b class="down">−${a.drop_pct}%</b>` : ''}</span>
+      </div>`).join('')}</div>` : '';
+    box.innerHTML = d.deals.slice(0, 3).map((x) => `
+      <article class="success-card">
+        <header><span class="pill pill-completed">✓ ${t('Completed')}</span><span class="small muted">${fmtDate(x.completed_at)}</span></header>
+        <h3>${fmtNum(x.acres)} ${t('acres of')} ${cropLabel(x.crop)}</h3>
+        <p class="muted small">${icon('mapPin', 13)} ${esc(x.village ? x.village + ', ' : '')}${esc(x.district)}, ${esc(x.state)}</p>
+        <dl class="success-figs">
+          <div><dt>${t('Buyer budget')}</dt><dd>${inr(x.budget_total)}</dd></div>
+          <div><dt>${t('Won at')}</dt><dd class="hl">${inr(x.price_total)}</dd></div>
+          <div><dt>${t('Bids')}</dt><dd>${x.bid_count}</dd></div>
+          <div><dt>${t('Cleared in')}</dt><dd>${x.days_taken} ${t(x.days_taken === 1 ? 'day' : 'days')}</dd></div>
+        </dl>
+        <p class="success-parties">${icon('tractor', 14)} ${esc(x.operator)} <span class="muted">→</span> ${icon('factory', 14)} ${esc(x.buyer)}</p>
+        ${x.comment ? `<blockquote>“${esc(x.comment)}” ${x.stars ? `<span class="rating">★ ${x.stars}</span>` : ''}</blockquote>` : ''}
+        <p class="small ok-line">${icon('leaf', 13)} ${fmtNum(x.tonnes)} ${t('tonnes kept out of the fire')}${x.farmer_paid ? ` · ${t('farmer earned')} ${inr(x.farmer_paid)}` : ''}</p>
+      </article>`).join('') || `<p class="muted">${t('Completed deals will show up here.')}</p>`;
   }
 
   async function loadStats() {
@@ -1149,6 +1232,12 @@
     return `<div class="role-tabs" role="tablist">${ROLES.map((r) =>
       `<a role="tab" aria-selected="${r === role}" class="tab tab-${r} ${r === role ? 'on' : ''}" href="#/${mode}/${r}">${roleName(r)}</a>`).join('')}</div>`;
   }
+
+  const DEMO_USERS = {
+    farmer: [['farmer@demo.in', '9876500001', 'Gurpreet Singh', 'Sangrur, Punjab · completed + live deals'], ['farmer2@demo.in', '9876500002', 'Ramesh Yadav', 'Karnal, Haryana · work in progress'], ['farmer5@demo.in', '9876500005', 'Harbhajan Singh', 'Ludhiana, Punjab · paid for stubble']],
+    buyer: [['buyer@demo.in', '9876510001', 'Shree Ganesh Bricks', 'Ludhiana · 2 live auctions, payment due'], ['buyer2@demo.in', '9876510002', 'GreenFuel Biomass Energy', 'Panipat · live auction, order in progress'], ['buyer3@demo.in', '9876510003', 'Marudhar Bricks & Tiles', 'Jaipur · completed deals, refund']],
+    operator: [['operator@demo.in', '9876520001', 'Kisan Baler Services', 'Patiala · leading 2 auctions'], ['operator2@demo.in', '9876520002', 'Haryana Agri Machinery', 'Karnal · job in progress'], ['operator4@demo.in', '9876520004', 'Punjab Agro Balers', 'Ludhiana · bidding, crew on field']],
+  };
 
   function viewLogin(role) {
     if (!ROLES.includes(role)) return go('#/login/farmer');
@@ -1176,8 +1265,14 @@
         ${googleButton(role)}
         ${canOtp ? `<p style="margin-top:1rem;"><button class="link" data-action="login-mode">${t(otpMode ? 'Log in with your password instead' : 'Log in with a one-time code instead')}</button></p>` : ''}
         <p style="margin-top:1rem;">${t('New here?')} <a href="#/register/${role}" style="font-weight:700;">${t('Create an account')}</a></p>
-        ${S.meta.demo ? `<p class="demo small muted">${otpMode ? '' : t('Demo accounts share the password demo1234.')}
-          <button class="link" data-action="fill-demo" data-email="${demoEmail}" data-phone="${demoPhone}">⚡ ${t('Fill in demo login')}</button></p>` : ''}
+        ${S.meta.demo ? `<div class="demo">
+          <p class="small muted">${otpMode ? t('Demo accounts: tap one to fill the mobile number.') : t('Demo accounts share the password demo1234. Tap one to log in.')}</p>
+          <div class="demo-list">${DEMO_USERS[role].map(([email, phone, who, what]) => `
+            <button type="button" class="demo-user" data-action="fill-demo" data-email="${email}" data-phone="${phone}">
+              <span class="demo-av">${esc(who.split(' ').map((w) => w[0]).slice(0, 2).join(''))}</span>
+              <span><b>${esc(who)}</b><small>${esc(what)}</small></span>
+            </button>`).join('')}</div>
+        </div>` : ''}
       </section>`, 'narrow');
   }
 
@@ -2504,6 +2599,8 @@
     }
     if (my !== renderId || !view) return;
     $('#app').innerHTML = view;
+    $('#main-nav')?.classList.remove('open');
+    vaSync();
     if (!keepScroll) window.scrollTo(0, 0);
     if (afterRender) afterRender();
     if (u) refreshUnread();
@@ -2539,15 +2636,26 @@
   const actions = {
     lang() { S.lang = S.lang === 'hi' ? 'en' : 'hi'; store.set('b2b_lang', S.lang); render(); },
     bell: toggleBell,
+    'va-toggle'() { VA.open = !VA.open; if (!VA.open) { VA.rec?.stop(); window.speechSynthesis?.cancel(); } vaRender(); if (VA.open) $('#va-input')?.focus(); },
+    'va-speak'() { VA.speak = !VA.speak; store.set('b2b_va_speak', VA.speak ? '1' : '0'); if (!VA.speak) window.speechSynthesis?.cancel(); vaRender(); },
+    'va-mic'() { vaListen(); },
+    'va-chip'(el) { vaAsk(el.dataset.q); },
+    menu(el) {
+      const nav = $('#main-nav'); const open = !nav.classList.contains('open');
+      nav.classList.toggle('open', open); el.setAttribute('aria-expanded', String(open)); el.classList.toggle('x', open);
+    },
+    account(el) {
+      const m = $('#acct-menu'); m.hidden = !m.hidden; el.setAttribute('aria-expanded', String(!m.hidden));
+    },
     logout() { endSession(); },
     'close-modal': closeModal,
     'fill-demo'(el) {
       const otpForm = $('form[data-form="login-otp"]');
       if (otpForm) { otpForm.who.value = el.dataset.phone; otpForm.who.focus(); return; }
       const f = $('form[data-form="login"]');
-      if (f) {
-        f.email.value = el.dataset.email; f.password.value = 'demo1234'; f.password.focus();
-      }
+      if (!f) { go('#/login/' + (el.dataset.role || 'buyer')); return; }
+      f.email.value = el.dataset.email; f.password.value = 'demo1234';
+      f.requestSubmit();
     },
     'login-mode'() { resetRecaptcha(); S.loginOtp = !S.loginOtp; render(); },
     'otp-fill'(el) { const i = $('.otp-input', dlg); if (i) { i.value = el.dataset.code; i.focus(); } },
@@ -2693,8 +2801,13 @@
       return;
     }
     if (!e.target.closest('.bell-wrap')) { const p = $('#notif-panel'); if (p) p.hidden = true; }
+    if (!e.target.closest('.acct-wrap')) { const m = $('#acct-menu'); if (m) m.hidden = true; }
   });
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { const p = $('#notif-panel'); if (p) p.hidden = true; } });
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    for (const id of ['#notif-panel', '#acct-menu']) { const p = $(id); if (p) p.hidden = true; }
+    $('#main-nav')?.classList.remove('open');
+  });
 
   const submitters = {
     async login(f) {
@@ -2776,6 +2889,7 @@
       const out = await api(`/requirements/${f.dataset.id}/bids`, { method: 'POST', body: formObj(f) });
       toast(t(out.revised ? 'Bid improved.' : 'Bid sent.')); render();
     },
+    async va(f) { const q = f.q.value; f.q.value = ''; await vaAsk(q); },
     async pay(f) {
       const out = await api(`/deals/${f.dataset.id}/pay`, { method: 'POST', body: formObj(f) });
       receiptModal(out, f.dataset.id);
@@ -2878,6 +2992,116 @@
     const f = e.target.form;
     if (f?.dataset.form === 'listing' && ['village', 'district', 'state'].includes(e.target.name)) showPin();
   });
+
+  /* ───────────── "Ask Bale to Brick": AI voice assistant ───────────── */
+  const SRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const VA = { open: false, listening: false, busy: false, speak: store.get('b2b_va_speak') !== '0', msgs: [], rec: null, key: '' };
+  const vaRoot = () => $('#assistant-root');
+  const vaChips = () => {
+    const r = S.user?.role;
+    const en = {
+      buyer: ['What is my lowest bid?', 'Do I have payments due?', 'Track my order', 'Open auctions'],
+      operator: ['What is my rank?', 'Show open jobs', 'How much money is in escrow?', 'Track my order'],
+      farmer: ['Where is my order?', 'How much have I received?', 'Post my land', 'How does it work?'],
+    }[r] || ['How does it work?', 'What is the platform fee?', 'How is payment kept safe?', 'Why not burn stubble?'];
+    const hi = {
+      buyer: ['मेरी सबसे कम बोली क्या है?', 'कोई भुगतान बाकी है?', 'मेरा ऑर्डर कहाँ है?', 'नीलामी खोलो'],
+      operator: ['मेरी रैंक क्या है?', 'खुले काम दिखाओ', 'एस्क्रो में कितना पैसा है?', 'मेरा ऑर्डर कहाँ है?'],
+      farmer: ['मेरा ऑर्डर कहाँ है?', 'मुझे कितना पैसा मिला?', 'मेरी ज़मीन दर्ज करो', 'यह कैसे काम करता है?'],
+    }[r] || ['यह कैसे काम करता है?', 'प्लेटफ़ॉर्म शुल्क कितना है?', 'भुगतान सुरक्षित कैसे है?', 'पराली क्यों न जलाएँ?'];
+    return S.lang === 'hi' ? hi : en;
+  };
+
+  function vaRender() {
+    const root = vaRoot();
+    if (!root) return;
+    VA.key = `${S.user?.id || 0}|${S.lang}`;
+    const msgs = VA.msgs.length ? VA.msgs : [{ from: 'bot', text: t(S.user ? 'Hi! Ask me about your auctions, bids, orders or payments. Tap the mic and speak in Hindi or English.' : 'Hi! I can explain how Bale to Brick works. Tap the mic and speak in Hindi or English.') }];
+    root.innerHTML = `
+      <button class="va-fab ${VA.open ? 'is-open' : ''}" data-action="va-toggle" aria-expanded="${VA.open}" aria-controls="va-panel" aria-label="${t('Ask Bale to Brick')}">
+        ${VA.open ? '<span class="va-x" aria-hidden="true">×</span>' : `<img src="img/logo-96.png" alt="" width="34" height="34"><span class="va-fab-label">${t('Ask AI')}</span>`}
+      </button>
+      <section class="va-panel" id="va-panel" ${VA.open ? '' : 'hidden'} aria-label="${t('Ask Bale to Brick')}">
+        <header class="va-head">
+          <img src="img/logo-96.png" alt="" width="36" height="36">
+          <div><b>${t('Ask Bale to Brick')}</b><small>${t('Voice assistant')} · ${S.lang === 'hi' ? 'हिन्दी' : 'English'}</small></div>
+          <button class="va-icon" data-action="va-speak" aria-pressed="${VA.speak}" title="${t(VA.speak ? 'Mute spoken replies' : 'Speak replies aloud')}">${VA.speak ? '🔊' : '🔇'}</button>
+        </header>
+        <div class="va-log" id="va-log" aria-live="polite">
+          ${msgs.map((m) => `<div class="va-msg va-${m.from}"><p>${esc(m.text)}</p>${m.navigate ? `<a class="va-go" href="${esc(m.navigate)}">${t('Open page')} ›</a>` : ''}${m.engine ? `<small>${esc(m.engine)}</small>` : ''}</div>`).join('')}
+          ${VA.busy ? `<div class="va-msg va-bot va-typing"><span></span><span></span><span></span></div>` : ''}
+        </div>
+        <div class="va-chips">${vaChips().map((c) => `<button data-action="va-chip" data-q="${esc(c)}">${esc(c)}</button>`).join('')}</div>
+        <form class="va-form" data-form="va">
+          <button type="button" class="va-mic ${VA.listening ? 'on' : ''}" data-action="va-mic" ${SRec ? '' : 'disabled title="' + esc(t('Voice input needs Chrome or Edge. You can type instead.')) + '"'} aria-label="${t(VA.listening ? 'Stop listening' : 'Speak')}">
+            ${VA.listening ? '<span class="va-wave"><i></i><i></i><i></i><i></i></span>' : `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 17v4M8 21h8"/></svg>`}
+          </button>
+          <input name="q" id="va-input" autocomplete="off" maxlength="500" placeholder="${esc(t(VA.listening ? 'Listening…' : 'Ask by voice or type here'))}" aria-label="${t('Your question')}">
+          <button class="va-send" type="submit" aria-label="${t('Send')}">${icon('arrowRight', 18)}</button>
+        </form>
+      </section>`;
+    const log = $('#va-log'); if (log) log.scrollTop = log.scrollHeight;
+  }
+  function vaSync() { if (VA.key !== `${S.user?.id || 0}|${S.lang}`) { if (VA.key) VA.msgs = []; vaRender(); } }
+
+  function vaSay(text) {
+    if (!VA.speak || !window.speechSynthesis) return;
+    const lang = S.lang === 'hi' || /[\u0900-\u097F]/.test(text) ? 'hi-IN' : 'en-IN';
+    const spoken = text.replace(/₹\s?([\d,]+)/g, (_, n) => (lang === 'hi-IN' ? `${n} रुपये` : `${n} rupees`));
+    const u = new SpeechSynthesisUtterance(spoken);
+    u.lang = lang; u.rate = 1;
+    const v = speechSynthesis.getVoices().find((x) => x.lang === lang) || speechSynthesis.getVoices().find((x) => x.lang.startsWith(lang.slice(0, 2)));
+    if (v) u.voice = v;
+    speechSynthesis.cancel(); speechSynthesis.speak(u);
+  }
+
+  async function vaAsk(text) {
+    text = String(text || '').trim();
+    if (!text || VA.busy) return;
+    VA.msgs.push({ from: 'me', text });
+    VA.busy = true; vaRender();
+    try {
+      const out = await api('/assistant', { method: 'POST', body: { text, lang: S.lang, history: VA.msgs.slice(-7, -1) } });
+      VA.msgs.push({ from: 'bot', text: out.reply, navigate: out.navigate, engine: out.engine });
+      VA.busy = false; vaRender(); vaSay(out.reply);
+      if (out.navigate && out.navigate !== location.hash) setTimeout(() => { location.hash = out.navigate; }, 900);
+    } catch (e) {
+      VA.msgs.push({ from: 'bot', text: e.message });
+      VA.busy = false; vaRender();
+    }
+  }
+
+  function vaListen() {
+    if (!SRec) return toast(t('Voice input needs Chrome or Edge. You can type instead.'), 'error');
+    if (VA.listening) { VA.rec?.stop(); return; }
+    window.speechSynthesis?.cancel();
+    const rec = new SRec();
+    rec.lang = S.lang === 'hi' ? 'hi-IN' : 'en-IN';
+    rec.interimResults = true; rec.continuous = false; rec.maxAlternatives = 1;
+    let finalText = '';
+    rec.onresult = (e) => {
+      let interim = '';
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        if (e.results[i].isFinal) finalText += e.results[i][0].transcript; else interim += e.results[i][0].transcript;
+      }
+      const inp = $('#va-input'); if (inp) inp.value = (finalText + ' ' + interim).trim();
+    };
+    rec.onerror = (e) => {
+      if (e.error === 'not-allowed' || e.error === 'service-not-allowed') toast(t('Microphone permission was denied. Allow it in the address bar, or type your question.'), 'error');
+      else if (e.error !== 'no-speech' && e.error !== 'aborted') toast(e.error, 'error');
+    };
+    rec.onend = () => { VA.listening = false; VA.rec = null; vaRender(); if (finalText.trim()) vaAsk(finalText); };
+    VA.rec = rec; VA.listening = true; vaRender();
+    try { rec.start(); } catch { VA.listening = false; vaRender(); }
+  }
+
+  document.addEventListener('error', (e) => {
+    const img = e.target;
+    if (img?.tagName === 'IMG' && img.dataset.fallback && !img.dataset.failed) {
+      img.dataset.failed = '1';
+      img.closest('figure')?.classList.add('img-failed');
+    }
+  }, true);
 
   /* ───────────── boot ───────────── */
   async function boot() {
